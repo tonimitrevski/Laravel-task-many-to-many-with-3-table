@@ -25,21 +25,16 @@ class User extends Authenticatable
     ];
 
 
-    public function organisations()
-    {
-        return $this->belongsToMany(Organisation::class, 'users_organisation_roles');
-    }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'users_organisation_roles');
-    }
 
 
     public function clients()
     {
         return $this->hasMany(Client::class, 'creator_user_id');
     }
+
+
+
 
     public static function roleOwner()
     {
@@ -50,6 +45,35 @@ class User extends Authenticatable
     public function organisationsOwner()
     {
         return $this->organisations()->wherePivot('role_id', self::roleOwner()->id);
+    }
+
+    /*All Organisation in user With Clients*/
+    public function organisationsOwnerWithClients()
+    {
+        return $this->organisations()->wherePivot('role_id', self::roleOwner()->id)->with('clients');
+    }
+
+
+
+
+
+
+
+    public function organisations()
+    {
+        return $this->belongsToMany(Organisation::class, 'users_organisation_roles');
+    }
+
+
+    public function organisationsRoles()
+    {
+        return $this->belongsToMany(Role::class, 'users_organisation_roles')->withPivot('organisation_id')->withTimestamps();
+    }
+
+    // Determine which role a user has for a specific Organisation
+    public function organisationRole($organisation_id)
+    {
+        return $this->belongsToMany(Role::class, 'users_organisation_roles')->wherePivot('organisation_id', $organisation_id)->withTimestamps()->first();
     }
 
 

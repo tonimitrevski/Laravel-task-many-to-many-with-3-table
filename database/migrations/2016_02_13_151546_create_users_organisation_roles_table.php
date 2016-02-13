@@ -33,6 +33,9 @@ class CreateUsersOrganisationRolesTable extends Migration
                 ->references('id')
                 ->on('roles')
                 ->onDelete('cascade');
+
+
+            $table->unique(['organisation_id', 'user_id']); // This ensures that a user can have only ONE role per organisation
         });
     }
 

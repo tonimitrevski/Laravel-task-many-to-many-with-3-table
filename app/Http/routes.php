@@ -33,7 +33,10 @@ Route::group(['middleware' => ['web']], function () {
 
         $organisationUser = $userFirst->organisationsOwner();
 
-        $client = $organisationUser->with('clients')->get();
+        $rolesOrganisation = $userFirst->organisationRole(3);
+
+
+        dd($rolesOrganisation);
 
     });
 });
