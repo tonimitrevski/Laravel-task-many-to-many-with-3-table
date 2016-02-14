@@ -47,7 +47,7 @@ class UsersOrganisationRoles extends Model
         if($relations) {
             foreach($relations as $relation) {
                 if($relation == $owner->id) {
-                    session()->flash('hasOwner', 'It\'s not allowed to hav multiple owner this organisation');
+                    session()->flash('hasOwner', 'It\'s not allowed to have multiple owner on this organisation');
                     return true;
                 }
             }
