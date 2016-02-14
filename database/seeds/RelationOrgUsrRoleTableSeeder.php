@@ -13,9 +13,6 @@ class RelationOrgUsrRoleTableSeeder extends Seeder
     {
         $users = \App\User::all()->toArray();
         $roles = \App\Role::all()->toArray();
-        $organisations = \App\Organisation::all()->toArray();
-
-
 
         $count = 0;
 
