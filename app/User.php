@@ -25,55 +25,84 @@ class User extends Authenticatable
     ];
 
 
-
-
-
+    /**
+     * User Has Many Clients
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function clients()
     {
         return $this->hasMany(Client::class, 'creator_user_id');
     }
 
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+
+        });
+    }
 
 
-
+    /**
+     * Role Owner
+     * @return mixed
+     */
     public static function roleOwner()
     {
         return Role::whereName('owner')->first();
     }
 
-    /*All Organisation in user*/
+    /**
+     * All Organisation where user is owner
+     * @return mixed
+     */
     public function organisationsOwner()
     {
         return $this->organisations()->wherePivot('role_id', self::roleOwner()->id);
     }
 
-    /*All Organisation in user With Clients*/
+    /**
+     * All Organisation where user is owner with clients
+     * @return mixed
+     */
     public function organisationsOwnerWithClients()
     {
         return $this->organisations()->wherePivot('role_id', self::roleOwner()->id)->with('clients');
     }
 
-
-
-
-
-
-
+    /**
+     * All Organisation in user
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function organisations()
     {
         return $this->belongsToMany(Organisation::class, 'users_organisation_roles');
     }
 
 
+    /**
+     * Determine all role user has for a all Organisation
+     * @return $this
+     */
     public function organisationsRoles()
     {
-        return $this->belongsToMany(Role::class, 'users_organisation_roles')->withPivot('organisation_id')->withTimestamps();
+        return $this->belongsToMany(Role::class, 'users_organisation_roles')->withPivot('organisation_id');
     }
 
-    // Determine which role a user has for a specific Organisation
+    /**
+     * Determine which role a user has for a specific Organisation
+     * @param $organisation_id
+     * @return mixed
+     */
     public function organisationRole($organisation_id)
     {
-        return $this->belongsToMany(Role::class, 'users_organisation_roles')->wherePivot('organisation_id', $organisation_id)->withTimestamps()->first();
+        return $this->belongsToMany(Role::class, 'users_organisation_roles')->wherePivot('organisation_id', $organisation_id)->first();
     }
 
 

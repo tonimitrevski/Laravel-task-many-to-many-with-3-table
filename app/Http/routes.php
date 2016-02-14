@@ -24,7 +24,7 @@
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
+/*Route::group(['middleware' => ['web']], function () {
     Route::get('/', function () {
 
         $user = new \App\User();
@@ -39,4 +39,14 @@ Route::group(['middleware' => ['web']], function () {
         dd($rolesOrganisation);
 
     });
+});*/
+
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    Route::get('/home', 'HomeController@index');
 });
