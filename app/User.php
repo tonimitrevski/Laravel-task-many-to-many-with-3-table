@@ -35,21 +35,6 @@ class User extends Authenticatable
     }
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($user) {
-
-        });
-    }
-
-
-    /**
      * Role Owner
      * @return mixed
      */

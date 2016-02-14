@@ -24,29 +24,13 @@
 |
 */
 
-/*Route::group(['middleware' => ['web']], function () {
-    Route::get('/', function () {
-
-        $user = new \App\User();
-
-        $userFirst = $user->first();
-
-        $organisationUser = $userFirst->organisationsOwner();
-
-        $rolesOrganisation = $userFirst->organisationRole(3);
-
-
-        dd($rolesOrganisation);
-
-    });
-});*/
-
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    Route::get('/',[
+        'as' => 'root',
+        'uses' => 'HomeController@root'
+    ]);
 
     Route::get('/home', 'HomeController@index');
 });
