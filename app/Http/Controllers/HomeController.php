@@ -39,7 +39,8 @@ class HomeController extends Controller
             'role_id' => 52
         ]);
 
-        dd(session('hasOwner'));*/
+        dump(session('hasOwner'));
+        dd(session('userHasOneRowInOrganisation'));*/
         return view('welcome');
     }
 }

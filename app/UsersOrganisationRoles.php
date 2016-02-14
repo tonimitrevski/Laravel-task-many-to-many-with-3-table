@@ -28,18 +28,29 @@ class UsersOrganisationRoles extends Model
 
         static::creating(function($model)
         {
-            if(self::organisationHasOwner($model->organisation_id)) {
+            if(self::userHasOneRowInOrganisation($model)) {
+                return false;
+            }
+            else if(self::organisationHasOwner($model->organisation_id)) {
                 return false;
             }
         });
+
         static::updating(function($model)
         {
-            if(self::organisationHasOwner($model->organisation_id)) {
+            if(self::userHasOneRowInOrganisation($model)) {
+                return false;
+            }
+            else if(self::organisationHasOwner($model->organisation_id)) {
                 return false;
             }
         });
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public static function organisationHasOwner($id) {
         $relations = self::where('organisation_id', $id)->lists('role_id');
         $owner = User::roleOwner();
@@ -51,6 +62,19 @@ class UsersOrganisationRoles extends Model
                     return true;
                 }
             }
+        }
+    }
+
+    /**
+     * @param $model
+     * @return bool
+     */
+    public static function userHasOneRowInOrganisation($model) {
+        $relation = self::where('user_id', $model->user_id)->where('organisation_id', $model->organisation_id)->first();
+
+        if($relation) {
+            session()->flash('userHasOneRowInOrganisation', 'Only one row user has in one organisation');
+            return true;
         }
     }
 }
